@@ -1,51 +1,24 @@
 <script setup>
 import { onMounted } from 'vue';
-
+import { ThreeJsApp } from './utils/init.js'
 import * as THREE from 'three';
-import WebGL from 'three/addons/capabilities/WebGL.js';
+import { addPlane, addBox, addSphere } from './utils/geometry.js'
+import { addDirectionalLight } from './utils/light.js'
 
 onMounted(() => {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const threeJs = new ThreeJsApp();
 
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  threeJs.scene.add(new THREE.AxesHelper(20));  // 显示坐标轴 The X axis is red. The Y axis is green. The Z axis is blue.
+  const box = addBox()
+  threeJs.scene.add(addPlane())
+  threeJs.scene.add(box)
+  threeJs.scene.add(addSphere())
 
-  const container = document.getElementById('item');
-  container.appendChild(renderer.domElement);
-
-  camera.position.set( 0, 0, 100 );
-  camera.lookAt(0, 0, 0);
-
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
-  const points = [];
-  points.push(new THREE.Vector3(- 10, 0, 0));
-  points.push(new THREE.Vector3(0, 10, 0));
-  points.push(new THREE.Vector3(10, 0, 0));
-
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-  const item = new THREE.Line(geometry, material);
-  scene.add(item);
-
-  // const geometry = new THREE.BoxGeometry(1, 1, 1);
-
-  function animate() {
-    requestAnimationFrame(animate);
-
-    item.rotation.x += 0.01;
-    item.rotation.y += 0.01;
-
-    renderer.render(scene, camera);
-  }
-
-  if (WebGL.isWebGLAvailable()) {
-    animate();
-  } else {
-    const warning = WebGL.getWebGLErrorMessage();
-    document.getElementById('container').appendChild(warning);
-  }
+  addDirectionalLight(threeJs.scene)
+  threeJs.animate(() => {
+    box.rotation.x += 0.01;
+    box.rotation.y += 0.01;
+  })
 });
 
 </script>
@@ -54,5 +27,3 @@ onMounted(() => {
   <div id="item" style="width: 100%;height: 100%;">
   </div>
 </template>
-
-<style scoped></style>
