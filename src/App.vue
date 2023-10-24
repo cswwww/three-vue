@@ -5,20 +5,35 @@ import * as THREE from 'three';
 import { addPlane, addBox, addSphere } from './utils/geometry.js'
 import { addDirectionalLight } from './utils/light.js'
 
+
+
 onMounted(() => {
   const threeJs = new ThreeJsApp();
-
-  threeJs.scene.add(new THREE.AxesHelper(20));  // 显示坐标轴 The X axis is red. The Y axis is green. The Z axis is blue.
+  let step = 0
+  
   const box = addBox()
-  threeJs.scene.add(addPlane())
+  const sphere = addSphere()
   threeJs.scene.add(box)
-  threeJs.scene.add(addSphere())
+  threeJs.scene.add(sphere)
+  threeJs.scene.add(addPlane())
 
   addDirectionalLight(threeJs.scene)
+
   threeJs.animate(() => {
-    box.rotation.x += 0.01;
-    box.rotation.y += 0.01;
+    step += 0.04;
+    sphere.position.x = 20 + (10 * (Math.cos(step)));
+    sphere.position.y = 2 + (10 * Math.abs(Math.sin(step)));
+
+    threeJs.scene.traverse(e => {
+      if (e instanceof THREE.Mesh && e == box) {
+        e.rotation.x += 0.01;
+        e.rotation.y += 0.01;
+      }
+    });
+
   })
+
+  window.addEventListener('resize', threeJs.onResize.bind(threeJs), false);
 });
 
 </script>

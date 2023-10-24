@@ -11,7 +11,7 @@ function addDirectionalLight(scene) {
   const light = new THREE.DirectionalLight(0xFFFFFF, 10);
   const helper = new THREE.DirectionalLightHelper(light, 5);
 
-  light.position.set(50, 50, 0); //default; light shining from top
+  light.position.set(50, 40, 0); //default; light shining from top
   light.castShadow = true; // default false
 
   //Set up shadow properties for the light
@@ -45,6 +45,30 @@ function addPointLight(scene) {
   scene.add(helper);
 }
 
+// 聚光灯
+function addSpotLight(scene) {
+  const light = new THREE.SpotLight(0xffffff);
+  light.position.set(50, 40, 10);
+  // light.map = new THREE.TextureLoader().load( url );
+
+  light.castShadow = true; // default false
+
+  light.shadow.mapSize.width = 512; // default
+  light.shadow.mapSize.height = 512; // default
+  light.shadow.camera.near = 0.5; // default
+  light.shadow.camera.far = 500; // default
+  // light.shadow.camera.fov = 30;
+  // light.shadow.focus = 1; // default
+
+  const helper = new THREE.SpotLightHelper(light);
+
+  scene.add(light);
+  scene.add(helper);
+
+  // const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
+  // scene.add(cameraHelper);
+}
+
 export {
-  addDirectionalLight, addPointLight
+  addDirectionalLight, addPointLight, addSpotLight
 }
