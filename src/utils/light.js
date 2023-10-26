@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
-const ambientLight = new THREE.AmbientLight(0xffffff);
-
-export {
-  ambientLight,
+// 环境光
+function addAmbientLight(scene) {
+  const light = new THREE.AmbientLight( new THREE.Color("#ababab") ); // soft white light
+  scene.add(light);
 }
 
 // 平行光源
@@ -32,6 +32,7 @@ function addPointLight(scene) {
   const light = new THREE.PointLight(0xffffff, 1, 100);
   light.position.set(50, 50, 10);
   light.castShadow = true; // default false
+  light.intensity = 8000;
 
   light.shadow.mapSize.width = 512; // default
   light.shadow.mapSize.height = 512; // default
@@ -48,10 +49,12 @@ function addPointLight(scene) {
 // 聚光灯
 function addSpotLight(scene) {
   const light = new THREE.SpotLight(0xffffff);
-  light.position.set(50, 40, 10);
+  light.position.set(-40, 60, -10);
   // light.map = new THREE.TextureLoader().load( url );
 
-  light.castShadow = true; // default false
+  light.castShadow = true;
+  light.distance = 0;
+  light.angle = 0.4;
 
   light.shadow.mapSize.width = 512; // default
   light.shadow.mapSize.height = 512; // default
@@ -70,5 +73,5 @@ function addSpotLight(scene) {
 }
 
 export {
-  addDirectionalLight, addPointLight, addSpotLight
+  addAmbientLight, addDirectionalLight, addPointLight, addSpotLight
 }
